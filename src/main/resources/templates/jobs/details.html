@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${job.title}">Job Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="logo">JobPortal</a>
+    </div>
+</header>
+
+<main class="container">
+    <div class="job-detail">
+        <h1 th:text="${job.title}">Title</h1>
+        <p><strong>Location:</strong> <span th:text="${job.location}"></span></p>
+        <p><strong>Type:</strong> <span th:text="${job.employmentType}"></span></p>
+        <p th:text="${job.description}"></p>
+
+        <div th:if="${job.open}">
+            <h3>Apply</h3>
+            <form method="post" th:action="@{/jobs/{id}/apply(id=${job.id})}" th:object="${application}">
+                <label>Name</label><input type="text" th:field="*{applicantName}" required />
+                <label>Email</label><input type="email" th:field="*{applicantEmail}" required />
+                <label>Resume (text)</label><textarea th:field="*{resumeText}" rows="6"></textarea>
+                <button type="submit">Submit Application</button>
+            </form>
+        </div>
+        <div th:unless="${job.open}">
+            <p>This listing is closed.</p>
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container"><p>© JobPortal</p></div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="logo">JobPortal</a>
+        <nav>
+            <a href="/logout" class="button-logout">Logout</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <div class="admin-actions">
+        <a href="/admin/jobs/new" class="button">New Job</a>
+    </div>
+
+    <div class="job-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th><th>Location</th><th>Type</th><th>Open</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="job : ${jobs.content}">
+                    <td th:text="${job.title}"></td>
+                    <td th:text="${job.location}"></td>
+                    <td th:text="${job.employmentType}"></td>
+                    <td th:text="${job.open}"></td>
+                    <td>
+                        <a th:href="@{/admin/jobs/edit/{id}(id=${job.id})}">Edit</a> |
+                        <a th:href="@{/admin/jobs/delete/{id}(id=${job.id})}" onclick="return confirm('Delete?')">Delete</a> |
+                        <a th:href="@{/admin/jobs/toggle/{id}(id=${job.id})}">Toggle</a> |
+                        <a th:href="@{/admin/jobs/{id}/applicants(id=${job.id})}">Applicants</a> |
+                        <a th:href="@{/admin/jobs/{id}/export(id=${job.id})}">Export CSV</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <a th:if="${jobs.hasPrevious()}" th:href="@{/admin/dashboard(page=${jobs.number-1})}">Prev</a>
+            <span>Page <span th:text="${jobs.number+1}"></span> of <span th:text="${jobs.totalPages}"></span></span>
+            <a th:if="${jobs.hasNext()}" th:href="@{/admin/dashboard(page=${jobs.number+1})}">Next</a>
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>© JobPortal</p>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Applicants for [[${job.title}]]</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="container">
+    <h2 th:text="'Applicants for: ' + ${job.title}">Applicants</h2>
+    <a th:href="@{/admin/jobs/{id}/export(id=${job.id})}">Export CSV</a>
+    <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Resume</th><th>Applied At</th></tr></thead>
+        <tbody>
+            <tr th:each="a : ${apps}">
+                <td th:text="${a.applicantName}"></td>
+                <td th:text="${a.applicantEmail}"></td>
+                <td th:text="${a.resumeText}"></td>
+                <td th:text="${a.appliedAt}"></td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

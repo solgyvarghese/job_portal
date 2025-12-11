@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Job Portal - Home</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="logo">JobPortal</a>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+            <a th:if="${#authentication != null and #authentication.authorities.?[authority=='ADMIN'].size() > 0}" 
+               href="/admin/dashboard">Admin</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <section class="hero">
+        <h1>Find your next job</h1>
+        <form method="get" action="/" class="search-form">
+            <input type="text" name="q" placeholder="Search jobs by title, location, type" th:value="${q}">
+            <button type="submit">Search</button>
+        </form>
+    </section>
+
+    <section class="job-list">
+        <div th:if="${jobs.content.size() == 0}">
+            <p>No jobs found.</p>
+        </div>
+
+        <div class="grid" th:each="job : ${jobs.content}">
+            <div class="card">
+                <h3 th:text="${job.title}">Job Title</h3>
+                <p th:text="${job.location}">Location</p>
+                <p th:text="${job.employmentType}">Type</p>
+
+                <!-- FIXED SUBSTRING ISSUE -->
+                <p th:text="${job.description != null && job.description.length() > 120 
+                            ? job.description.substring(0,120) + '...' 
+                            : job.description}">
+                </p>
+
+                <a th:href="@{/jobs/{id}(id=${job.id})}">View</a>
+            </div>
+        </div>
+
+        <div class="pagination">
+            <a th:if="${jobs.hasPrevious()}" th:href="@{/(page=${jobs.number-1}, q=${q})}">Previous</a>
+            <span>Page <span th:text="${jobs.number + 1}">1</span> of <span th:text="${jobs.totalPages}">1</span></span>
+            <a th:if="${jobs.hasNext()}" th:href="@{/(page=${jobs.number+1}, q=${q})}">Next</a>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>© JobPortal</p>
+    </div>
+</footer>
+</body>
+</html>
